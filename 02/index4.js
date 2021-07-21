@@ -143,102 +143,54 @@ else {
 // su console.log()
 
 
-console.log('-------------------------------------ketvirtas uzd----------------------------')
-let a4 = rand(0, 2);
-let b4 = rand(0, 2);
-let c4 = rand(0, 2);
-let d4 = rand(0, 2);
+console.log('------------------------------ketvirtas uzd -------------------------')
+let firstVar = rand(0, 2);
+let secondVar = rand(0, 2);
+let thirdVar = rand(0, 2);
+let fourthVar = rand(0, 2);
 
-let nuliu = 0;
-let vienetu = 0;
-let dvejetu = 0;
+let zero = 0;
+let one = 0;
+let two = 0;
 
-console.log(a4);
-console.log(b4);
-console.log(c4);
-console.log(d4);
+console.log(firstVar);
+console.log(secondVar);
+console.log(thirdVar);
+console.log(fourthVar);
 
-if (a4 < 2) {
-    if (a4 < 1) {
-        nuliu = nuliu + 1;
-    } else {
-        vienetu = vienetu + 1;
-    }
-}
-else {
-    dvejetu = dvejetu + 1;
+if (firstVar == 0) { zero++; }
+else if (firstVar == 1) { one++; }
+else { two++; }
 
-}
-if (b4 < 2) {
-    if (b4 < 1) {
-        nuliu = nuliu + 1;
-    } else {
-        vienetu = vienetu + 1;
-    }
-}
-else {
-    dvejetu = dvejetu + 1;
-}
-if (c4 < 2) {
-    if (c4 < 1) {
-        nuliu = nuliu + 1;
-    } else {
-        vienetu = vienetu + 1;
-    }
-}
-else {
-    dvejetu = dvejetu + 1;
-}
-if (d4 < 2) {
-    if (d4 < 1) {
-        nuliu = nuliu + 1;
-    } else {
-        vienetu = vienetu + 1;
-    }
-}
-else {
-    dvejetu = dvejetu + 1;
-}
+if (secondVar == 0) { zero++; }
+else if (secondVar == 1) { one++; }
+else { two++; }
 
-console.log('vienetu: ', vienetu);
-console.log('nuliu: ', nuliu);
-console.log('dvejetu: ', dvejetu);
+if (thirdVar == 0) { zero++; }
+else if (thirdVar == 1) { one++; }
+else { two++; }
+
+if (fourthVar == 0) { zero++; }
+else if (fourthVar == 1) { one++; }
+else { two++; }
+
+console.log('nuliu = ' + zero);
+console.log('vienetu = ' + one);
+console.log('dvejetu = ' + two);
+
+//kitas budas
+// let __2 = 0;
+// //suzinome kiek yra dvejetu
+// if (a1 == 2) __2++;
+// if (a2 == 2) __2++;
+// if (a3 == 2) __2++;
+// if (a4 == 2) __2++;
 
 
-console.log('------------------------------ketvirtas uzd antras budas-------------------------')
-let a42 = rand(0, 2);
-let b42 = rand(0, 2);
-let c42 = rand(0, 2);
-let d42 = rand(0, 2);
+// let __1 = a1 + a2 + a3 + a4 - (2 * __2);
+// let __0 = 4 - __1 - __2;
+// console.log(__0, __1, __2);
 
-let nuliuAntrasBudas = 0;
-let vienetuAntrasBudas = 0;
-let dvejetuAntrasBudas = 0;
-
-console.log(a42);
-console.log(b42);
-console.log(c42);
-console.log(d42);
-
-if (a42 == 0) { nuliuAntrasBudas++; }
-else if (a42 == 1) { vienetuAntrasBudas++; }
-else { dvejetuAntrasBudas++; }
-
-if (b42 == 0) { nuliuAntrasBudas++; }
-else if (b42 == 1) { vienetuAntrasBudas++; }
-else { dvejetuAntrasBudas++; }
-
-if (c42 == 0) { nuliuAntrasBudas++; }
-else if (c42 == 1) { vienetuAntrasBudas++; }
-else { dvejetuAntrasBudas++; }
-
-if (d42 == 0) { nuliuAntrasBudas++; }
-else if (d42 == 1) { vienetuAntrasBudas++; }
-else { dvejetuAntrasBudas++; }
-
-console.log('nuliu = ' + nuliuAntrasBudas);
-console.log('vienetu = ' + vienetuAntrasBudas);
-console.log('dvejetu = ' + dvejetuAntrasBudas);
 
 
 //penktas
