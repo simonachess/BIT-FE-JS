@@ -211,6 +211,9 @@ console.log('------desimtas----------------');
 let asAs = rand(0, 2) ? (rand(0, 1) ? 'popierius' : 'zirklės') : 'akmuo';
 let tuTu = rand(0, 2) ? (rand(0, 1) ? 'popierius' : 'zirklės') : 'akmuo';
 
+
+
+
 // console.log('asAs: ', asAs);
 // console.log('tuTu: ', tuTu);
 
