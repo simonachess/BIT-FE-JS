@@ -137,11 +137,11 @@ while (masyvasKorteliu.length < 20) {
     let kortele = rand(0, 1);
     if (kortele === 1) {
         masyvasKorteliu.push('MasterCard');
-        korteliuMaster++;
+        korteliuMaster++; //13uzd
     }
     else {
         masyvasKorteliu.push('VISA');
-        korteliuVisa++;
+        korteliuVisa++;  //13uzd
     }
 }
 console.log(masyvasKorteliu.slice());
@@ -154,10 +154,15 @@ console.log(`korteliu Master: ${korteliuMaster}, korteliu VISA: ${korteliuVisa}`
 console.log('-------------------------14--------------------------');
 
 let loterijosBilietai = [];
+let laimingiBilietai = 0;
 pinigine.push(loterijosBilietai);
 for (let i = 0; i < 10; i++) {
     let bilietoNr = rand(1000000000, 9999999999);
     loterijosBilietai.push(bilietoNr);
+    if (bilietoNr%2===0){
+        console.log('laimingo bilieto nr: ',bilietoNr);
+        laimingiBilietai++; //17uzd
+    }
 }
 
 console.log(loterijosBilietai.slice());
@@ -186,10 +191,21 @@ console.log('popieriniu pinigu skyrelio reiksmes: ', naujasMasyvas1);
 console.log('-------------------------17--------------------------');
 // Patikrinti ar ką nors laimėjote.Bilieto numerius dalinkite iš 777 ir jeigu numeris 
 // išsidalins be liekanos - jūs laimėjote! Suskaičiuokite, kiek buvo laimingų bilietų.
+// let laimingiBilietai = 0;
 
+console.log('laimingi bilietai: ', laimingiBilietai);
 
 
 console.log('-------------------------18--------------------------');
 // Sukurkite penktą skyrelį ir į jį sudėkite nuotraukas: ['šuo', 'katė', 'automobilis',
 //  'namas', 'kiemas'] ir jas išrūšiuokite pagal žodžių ilgį taip, kad pirma eitų 
 // trumpiausi žodžiai;
+
+let nuotraukuSkyrius=[];
+nuotraukuSkyrius.push('suo', 'kate', 'automobilis', 'namas', 'kiemas');
+
+nuotraukuSkyrius.sort(function (a, b) {
+    return a.length - b.length; //b.length - a.length butu mazejancia tvarka
+});
+
+console.log('isrikiuotas nuotrauku skyrius pagal ilgi: ', nuotraukuSkyrius);
