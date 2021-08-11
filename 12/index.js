@@ -119,8 +119,8 @@ console.log('-------------13-------------');
 let randomas131=0;
 let randomas132=0;
 do {
-    let randomas131 = rand(0, 10);
-    let randomas132 = rand(0, 10);
+    randomas131 = rand(0, 10);
+    randomas132 = rand(0, 10);
     console.log('skaiciai:', randomas131, randomas132);
 } while (randomas131 != randomas132);
 
@@ -132,8 +132,8 @@ let randSkaicius2;
 let skaiciuSuma1 = 0;
 let skaiciuSuma2 = 0;
 do {
-    let randSkaicius1 = rand(0, 10);
-    let randSkaicius2 = rand(0, 10);
+    randSkaicius1 = rand(0, 10);
+    randSkaicius2 = rand(0, 10);
     console.log('skaiciai:', randSkaicius1, randSkaicius2);
     skaiciuSuma1 = skaiciuSuma1 + randSkaicius1;
     skaiciuSuma2 = skaiciuSuma2 + randSkaicius2;
@@ -147,8 +147,8 @@ let randomasSkaicius2;
 let nelyginiai15rand1 = 0;
 let nelyginiai15rand2 = 0;
 do {
-    let randomasSkaicius1 = rand(0, 10);
-    let randomasSkaicius2 = rand(0, 10);
+    randomasSkaicius1 = rand(0, 10);
+    randomasSkaicius2 = rand(0, 10);
     console.log('skaiciai:', randomasSkaicius1, randomasSkaicius2);
     if (randomasSkaicius1 % 2 === 1) {
         nelyginiai15rand1++;

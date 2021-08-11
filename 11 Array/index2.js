@@ -4,8 +4,6 @@ function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
-
 console.log('-------------------------1--------------------------');
 
 let masyvas = [];
@@ -17,7 +15,6 @@ while (masyvas.length < masyvoIlgis) {
     masyvas.push(masyvoSkaicius);
 }
 console.log(masyvas.slice());
-
 
 console.log('-------------------------2--------------------------');
 
@@ -55,8 +52,6 @@ console.log('pinigai mazesni arba lygus uz 2: ', masyvas.slice());
 
 console.log('-------------------------5--------------------------');
 
-
-
 let didziausiuReiksmiuSuma = 0;
 let didziausiaReiksme = Math.max(...masyvas);
 for (let i = 0; i < masyvoIlgis; i++) {
@@ -66,7 +61,6 @@ for (let i = 0; i < masyvoIlgis; i++) {
     }
 }
 console.log(`didziausia reiksme: ${didziausiaReiksme}, didziausiu reiksmiu is viso: ${didziausiuReiksmiuSuma}`);
-
 
 console.log('-------------------------6--------------------------');
 
@@ -88,7 +82,6 @@ while (masyvas.length < 30) {
 
 }
 console.log(masyvas.slice());
-
 
 console.log('-------------------------8--------------------------');
 
@@ -176,17 +169,15 @@ console.log('-------------------------16--------------------------');
 // Į piniginės popierinių pinigų skyrelį įdėti 500 pinigų mažom 
 // kupiūrom(generuoti atsitiktinius skaičius nuo 3 iki 10 ir dėti kaip naujus 
 // elementus, kol įdėta suma bus lygi 500);
+
 let idetaSuma = 0;
 while (idetaSuma <= 500) {
     let dedamasPinigas = rand(3, 10);
     idetaSuma = idetaSuma + dedamasPinigas;
     naujasMasyvas1.push(dedamasPinigas);
-
 }
 console.log('ideta suma: ', idetaSuma);
 console.log('popieriniu pinigu skyrelio reiksmes: ', naujasMasyvas1);
-
-
 
 console.log('-------------------------17--------------------------');
 // Patikrinti ar ką nors laimėjote.Bilieto numerius dalinkite iš 777 ir jeigu numeris 
@@ -194,7 +185,6 @@ console.log('-------------------------17--------------------------');
 // let laimingiBilietai = 0;
 
 console.log('laimingi bilietai: ', laimingiBilietai);
-
 
 console.log('-------------------------18--------------------------');
 // Sukurkite penktą skyrelį ir į jį sudėkite nuotraukas: ['šuo', 'katė', 'automobilis',
