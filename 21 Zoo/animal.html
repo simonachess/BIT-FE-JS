@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21</title>
+    <script src="animal.js" defer></script>
+</head>
+
+<body>
+    <div style="display: flex; 
+    flex-direction: row; 
+    align-items: center;
+    justify-content: space-around;
+    background-color: lightgrey;
+    border: 1px solid grey;
+    border:none; 
+    border-radius: 15px;  
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 500px; 
+    padding: 10px;
+    margin: 20px 10px;">
+        <div>
+            <div>Specie: <br><input id="specie" type="text" value="specie" style="font-size: 16px; margin-top:5px;"></div>
+            <br>
+            <div>Tail long: <br><input id="tailLong" type="text" value="tailLong" style="font-size: 16px; margin-top:5px;"></div>
+            <br>
+            <div> Color: <br><input id="color" type="text" value="color" style="font-size: 16px; margin-top:5px;"></div>
+            <br>
+            <div><input id="horn" type="checkbox" name="horn">
+                <label for="horn"> Has horn</label>
+            </div><br>
+        </div>
+
+        <div style="margin: 30px 40px">
+            <button id="create" style="padding: 40px; 
+        border:none; 
+        border-radius: 15px; 
+        font-size: 16px; 
+        letter-spacing: 2px; 
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        cursor: pointer;">
+                Create</button>
+        </div>
+    </div>
+    <div class="container" style="display: flex; flex-direction: row; flex-wrap: wrap">
+
+    </div>
+
+</body>
+
+</html>
