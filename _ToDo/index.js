@@ -4,17 +4,33 @@ const toggleModal = () => {
 };
 
 document.querySelector('.create-new').addEventListener('click', toggleModal);
-
-// document.querySelector('#saveBtn').addEventListener('click', toggleModal);
-
 document.querySelector('#close-btn').addEventListener('click', toggleModal);
+
+class State {
+    static created = 0;
+    static doing = 1;
+    static done = 2;
+}
 
 class createtedTask {
 
     static tasks = [];
 
-    static createTask(title, description) {
-        this.tasks.push(new createtedTask(title, description));
+    static start() {
+        this.btnNew();
+
+        //laikinai
+        // createtedTask.createTask('pirma', 'išsivalyti dantis');
+        this.load();
+
+    }
+
+    static createTask(title, description, state) {
+        this.clearTasks()
+        this.tasks.push(new createtedTask(title, description, state));
+        this.renderTasks();
+        this.save();
+
     }
 
     static renderTasks() {
@@ -25,23 +41,131 @@ class createtedTask {
 
     static clearTasks() {
         this.tasks.forEach(e => document.querySelector('.created').removeChild(e.element));
-        // document.querySelector('.created').remove();
+        // this.tasks.forEach(task => {
+            
+        //         if (task.state === State.created) {
+        //             document.querySelector('.created').removeChild(this.element);
+        //             this.save();
+        //         } else if (task.state === State.doing) {
+        //             document.querySelector('.doing').removeChild(this.element);
+        //             this.save();
+        //         } else if (task.state === State.done) {
+        //             document.querySelector('.done').removeChild(this.element);
+        //             this.save();
+        //         }
+            
+        // })
     }
 
-    constructor(title, description) {
+    static btnNew() {
+
+        const titleTask = document.querySelector("#titleTask");
+        const descriptionTask = document.querySelector("#descriptionTask");
+        const btnSave = document.querySelector("#saveBtn");
+        const textArea = document.querySelector("#descriptionTask")
+        //todo get focus on load modal box
+
+        btnSave.addEventListener('click', () => {
+
+            this.createTask(titleTask.value, descriptionTask.value);
+            titleTask.value = '';
+            descriptionTask.value = '';
+            toggleModal();
+
+        });
+
+        textArea.addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                btnSave.click();
+            }
+        })
+    }
+
+    static deleteTask(id) {
+
+        this.tasks.forEach((e, i) => {
+            if (id === e.id) {
+                this.clearTasks();
+                this.tasks.splice(i, 1);
+                this.renderTasks();
+            };
+        });
+        this.save();
+    }
+
+    static save() {
+        const data = [];
+        this.tasks.forEach(e => {
+            data.push({
+                title: e.title,
+                description: e.description,
+                state: e.state,
+            })
+        })
+        console.log(data);
+
+        localStorage.setItem('tasksApp', JSON.stringify(data));
+    }
+
+    static load() {
+        if (null === localStorage.getItem('tasksApp')) {
+            localStorage.setItem('tasksApp', JSON.stringify([]));
+        }
+        JSON.parse(localStorage.getItem('tasksApp')).forEach(e => {
+            this.createTask(e.title, e.description, e.state);
+        });
+    }
+
+    static moveTask(id) {
+        this.tasks.forEach(task => {
+            if (id === task.id) {
+                const taskElement = document.getElementById(id);
+                if (task.state === State.created) {
+                    task.state = State.doing;
+                    console.log(task.state);
+                    document.querySelector(".doing").appendChild(taskElement);
+                    this.save();
+                }
+                else if (task.state === State.doing) {
+                    task.state = State.done;
+                    document.querySelector(".done").appendChild(taskElement);
+                    this.save();
+                }
+            };
+        })
+    }
+
+
+
+    constructor(title, description, state = State.created) {
         this.title = title;
         this.description = description;
-        // this.createTaskId();
+        this.state = state;
+        this.createTaskId();
     }
 
     render() {
         this.createTaskElement();
         this.createTaskHtml();
-    }
+        this.addDeleteButtonListener();
+        this.addDblClikListener();
 
+    }
+    //to do patikrinti kur ipaiso divus
     createTaskElement() {
         this.element = document.createElement("div");
+        this.element.setAttribute('id', this.id);
         document.querySelector(".created").appendChild(this.element);
+        // if (this.element.state === State.created) {
+        //     document.querySelector(".created").appendChild(this.element);
+        // } else if (this.element.state === State.doing) {
+        //     document.querySelector(".doing").appendChild(this.element);
+        // } else if (this.element.state === State.done) {
+        //     document.querySelector(".done").appendChild(this.element);
+        // }
+
+
     }
     createTaskHtml() {
         const html = `
@@ -55,13 +179,13 @@ class createtedTask {
         border: 1px solid grey; 
         border-radius: 10px; 
         padding: 5px 10px 5px 10px; 
-        margin-bottom: 10px">
+        margin-bottom: 10px" class="createdTask">
         <div style="margin-right: 20px">
         <p style="font-weight: bold; padding-bottom:5px">${this.title}</p>
         <p style="font-size: 14px">${this.description}</p>
         </div>
         <div style="position:absolute; right:0; cursor: pointer;">
-        <img src="trash-icon.png" alt="delete" id="btnDelete" data-id=${this.id} style="padding: 10px;">
+        <img src="trash-icon.png" alt="delete" id="btnDelete-${this.id}" style="padding: 10px;">
         </div>
         </div>
         `;
@@ -70,26 +194,19 @@ class createtedTask {
     createTaskId() {
         this.id = Math.floor(Math.random() * 9000000) + 100000;
     }
+    addDeleteButtonListener() {
+        this.element.querySelector(`#btnDelete-${this.id}`).addEventListener('click', () =>
+            this.constructor.deleteTask(this.id))
+    }
+    addDblClikListener() {
+        this.element.addEventListener('dblclick', () => {
+            this.constructor.moveTask(this.id)
+        })
+
+    }
+
+
 }
 
 
-createtedTask.createTask('pirma', 'išsivalyti dantis');
-
-const titleTask = document.querySelector("#titleTask");
-const descriptionTask = document.querySelector("#descriptionTask");
-const btnSave = document.querySelector("#saveBtn");
-
-btnSave.addEventListener('click', () => {
-    createtedTask.clearTasks();
-    createtedTask.createTask(titleTask.value, descriptionTask.value);
-    createtedTask.renderTasks();
-    titleTask.value = '';
-    descriptionTask.value = '';
-    toggleModal();
-
-});
-
-
-createtedTask.renderTasks();
-
-
+createtedTask.start();
