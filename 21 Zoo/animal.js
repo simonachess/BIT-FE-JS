@@ -19,11 +19,14 @@
 class Animal {
 
     static animals = []; //saugomi visi gyvunai ir zverys
-
+    static filterSet;
     element; //nuoroda i html taga su animal
 
     static start() {
         this.buttonCreate();
+        this.buttonHideModal();
+        this.buttonEdit(); //cia yra mygtukai kurie yra po viena
+        this.buttonConfirmDelete();
 
         //laikini gyvunai
         // Animal.createAnimal('zebras', 36, 'black-white', false);
@@ -35,40 +38,81 @@ class Animal {
         this.load();
     }
 
-    static createAnimal(specie, tailLong, color, hasHorn) {
+    static createAnimal(specie, tail, color, hasHorn) {
         this.clearZoo(); //is htmlo istrinam visus gyvunus
-        this.animals.push(new Animal(specie, tailLong, color, hasHorn));
+        this.animals.push(new Animal(specie, tail, color, hasHorn));
         this.renderZoo(); //is naujo sudedame visus gyvunus
         this.save();
+    }
+    
+    static editAnimal(id, specie, tail, color, hasHorn) {
+
+        this.animals.forEach(animal => {
+
+            if (id === `${animal.id}`) {
+                this.clearZoo();
+                console.log(specie);
+                animal.specie = specie;
+                animal.tail = tail;
+                animal.color = color;
+                animal.hasHorn = hasHorn;
+                this.renderZoo();
+            };
+        });
+        this.save();
+        this.hideModal('edit-container');
     }
 
     static renderZoo() {
         this.animals.forEach(e => {
             e.render();
         });
+        this.filterSelect();
+
     }
 
     static clearZoo() {
         this.animals.forEach(e => document.querySelector('.container').removeChild(e.element));
+        this.clearFilterSelect();
     }
 
+
     static buttonCreate() {
-        const specie = document.querySelector("#specie");
-        const tailLong = document.querySelector("#tailLong");
-        const color = document.querySelector("#color");
-        const horn = document.querySelector("#horn");
+        const specie = document.querySelector("#create-container [name=specie]");
+        const tail = document.querySelector("#create-container [name=tailLong]");
+        const color = document.querySelector("#create-container [name=color]");
+        const horn = document.querySelector("#create-container [name=horn]");
         const btnCreate = document.querySelector("#create");
         btnCreate.addEventListener('click', () => {
-            this.createAnimal(specie.value, tailLong.value, color.value, horn.checked);
+            this.createAnimal(
+                specie.value,
+                tail.value,
+                color.value,
+                horn.checked);
         });
     }
+
+    static buttonEdit() {
+        const specie = document.querySelector("#edit-container [name=specie]");
+        const tail = document.querySelector("#edit-container [name=tailLong]");
+        const color = document.querySelector("#edit-container [name=color]");
+        const horn = document.querySelector("#edit-container [name=horn]");
+
+        document.querySelector('.modal-footer .btn-primary').addEventListener('click', (e) => {
+            this.editAnimal(e.target.dataset.id, specie.value, tail.value, color.value, horn.checked); //susiranda animala pagal uzdeta id
+
+            console.log('paspaudziau');
+        });
+
+    }
+
 
     static deleteAnimal(id) {
         //susirandame indeksa masyvo elemente kuri norime istrinti ir tada naudojame  istrinti ta elementa
 
         //destytojas: masyve animals surasti objektą kurio id yra lygus id argumentui ir atspausdinti indeksą
         this.animals.forEach((e, i) => {
-            if (id === e.id) {
+            if (id === `${e.id}`) {
                 this.clearZoo(); //istrinam html
                 this.animals.splice(i, 1); //trina masyve, ne html, i nurodo indeksa kuri trinti, 1, kad trinti 1 elementa
                 this.renderZoo(); //perrenderinam visa html per nauja
@@ -86,15 +130,15 @@ class Animal {
             data.push(
                 {
                     specie: e.specie,
-                    tail: e.tailLong,
+                    tail: e.tail,
                     color: e.color,
                     horn: e.hasHorn,
                 });
         })
-        console.log(data);
+        // console.log(data);
 
         localStorage.setItem('zooApp', JSON.stringify(data)); //zooApp yra raktas localStoragui
-
+        this.makeFilterSet();
     }
 
     static load() {
@@ -102,13 +146,148 @@ class Animal {
             localStorage.setItem('zooApp', JSON.stringify([]));
         }
         JSON.parse(localStorage.getItem('zooApp')).forEach(e => {
-            this.createAnimal(e.specie, e.tailLong, e.color, e.hasHorn);
+            this.createAnimal(e.specie, e.tail, e.color, e.horn);
+        });
+
+        this.makeFilterSet();
+
+    }
+
+
+    static showEditModal(animal) {
+
+        const modal = document.querySelector("#edit-container");
+        modal.style.display = "block";
+        modal.style.opacity = 1;
+        modal.querySelector('.btn-primary').dataset.id = animal.id; //susirandame modale mygtuka save changes ir uzdedame jam dataset.id ir prilyginam ji to animalo id sugeneruotam
+        const specie = document.querySelector("#edit-container [name=specie]");
+        const tail = document.querySelector("#edit-container [name=tailLong]");
+        const color = document.querySelector("#edit-container [name=color]");
+        const horn = document.querySelector("#edit-container [name=horn]");
+
+        specie.value = animal.specie;
+        tail.value = animal.tail;
+        color.value = animal.color;
+        horn.checked = animal.hasHorn;
+
+    }
+
+    static showDeleteConfirmModal(id) {
+        const modal = document.querySelector("#confirm-delete");
+        modal.style.display = "block";
+        modal.style.opacity = 1;
+        modal.querySelector('.btn-primary').dataset.id = id;
+    }
+
+    static hideModal(id) {
+        const modal = document.querySelector('#' + id);
+        modal.style.display = 'none';
+        modal.style.opacity = 0;
+        delete modal.querySelector('.btn-primary').dataset.id; //ta ka iraseme showEditModal cia istriname
+    }
+
+    static buttonConfirmDelete() {
+
+        document.querySelector('#confirm-delete .btn-primary').
+            addEventListener('click', (e) => {
+                this.deleteAnimal(e.target.dataset.id);
+                this.hideModal('confirm-delete')
+            })
+
+    }
+
+    static buttonHideModal() {
+        document.querySelectorAll('[data-dismiss=modal]').forEach(button => {
+            button.addEventListener('click', (e) => {
+
+                this.hideModal(e.target.closest('.modal').id);
+            })
         });
     }
 
-    constructor(specie, tailLong, color, hasHorn) {
+    static sortButton() {
+        document.querySelector('#sort_specie').addEventListener('click', e => {
+            this.showSorted(e.target.id);
+        }
+        );
+        document.querySelector('#sort_tail_long').addEventListener('click', e => {
+            this.showSorted(e.target.id);
+        })
+        // document.querySelector('#sort_specie, #sort_tail_long')
+        // .forEach(b => {
+        //     b.addEventListener('click', e=> this.showSorted(e.target.id));
+        // });
+    }
+    static showSorted(id) {
+        if ('sort_tail_long' == id) {
+            if (document.querySelector('#sort_acs').checked) {
+                this.animals.sort(function (a, b) {
+                    return a.tail - b.tail;
+                })
+            }
+            else {
+                this.animals.sort(function (a, b) {
+                    return b.tail - a.tail;
+                })
+            }
+        }
+        if ('sort_specie' == id) {
+            this.animals.sort(function (a, b) {
+                const nameA = a.specie.toUpperCase();
+                const nameB = b.specie.toUpperCase();
+                if (document.querySelector('#sort_acs').checked) {
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                }
+                else {
+                    if (nameA < nameB) {
+                        return 1;
+                    }
+                    if (nameA > nameB) {
+                        return -1;
+                    }
+                    return 0;
+                }
+            })
+        }
+
+        this.clearZoo();
+        this.renderZoo();
+    }
+
+    static makeFilterSet() {
+        this.filterSet = new Set();
+        this.animals.forEach(animal => this.filterSet.add(animal.specie));
+        this.filterSet = new Set([...this.filterSet].sort());
+        console.log(this.filterSet)
+    }
+
+    static filterSelect() {
+        if (undefined === this.filterSet) {
+            return
+        }
+        const select = document.querySelector('#animals_list');
+        this.filterSet.forEach(a => {
+            const element = document.createElement('option');
+            element.innerText = a;
+            element.value = a;
+            select.appendChild(element);
+        });
+
+    }
+
+    static clearFilterSelect() {
+        document.querySelector('#animals_list').innerHTML = '';
+    }
+
+    constructor(specie, tail, color, hasHorn) {
         this.specie = specie;
-        this.tailLong = tailLong;
+        this.tail = tail;
         this.color = color;
         this.hasHorn = hasHorn;
         this.createAnimalId();
@@ -118,6 +297,7 @@ class Animal {
         this.createAnimalElement();
         this.createAnimalHtml();
         this.deleteButton(); //butono eventas
+        this.editButton()
     }
 
     createAnimalElement() {
@@ -127,14 +307,14 @@ class Animal {
     createAnimalHtml() {
         const horn = this.hasHorn ? 'Has horn' : 'No horn';
         const html = `
-        <div style="width: 200px; border: 1px solid lightgrey; border-radius: 15px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; padding: 10px 20px; margin: 10px">
-        <h1 style="text-align: center; background-color: lightgrey; border-radius: 15px; letter-spacing: 3px; text-transform: uppercase; padding: 5px">${this.specie}</h1>
-        <p>Tail long: ${this.tailLong} cm</p>
-        <i>Color: ${this.color}</i>
+        <div class="container-create">
+        <h1>${this.specie}</h1>
+        <p>Tail long: ${this.tail} cm</p>
+        <p><i>Color: ${this.color}</i></P>
         <p>${horn}</p>
-        <div style="display:flex; justify-content: space-between">
-        <button id="edit" style="padding: 10px; margin: 5px; color: green; cursor: pointer; width: 80px;">Edit</button>
-        <button id="delete" style="padding: 10px; margin: 5px; color: red; cursor: pointer; width: 80px;">Delete</button>
+        <div class="delete-edit">
+        <button class="editBtn">Edit</button>
+        <button class="deleteBtn">Delete</button>
         </div>
         </div>
         <br>
@@ -149,10 +329,27 @@ class Animal {
         this.id = Math.floor(Math.random() * 9000000) + 100000;
     }
 
+    // deleteButton() {
+    //     this.element.querySelector('.deleteBtn').addEventListener('click', () =>  //ieskant mygtuko naudojam ne document o this.element, kas yra nuoroda i html taga i tam tikra zveri
+    //         this.constructor.deleteAnimal(this.id) //savybe id is metodo createAnimalId. this.constructor atitinka klase Animal
+    //         //  console.log(this.id)
+
+    //     );
+    // }
+
     deleteButton() {
-        this.element.querySelector('#delete').addEventListener('click', () =>  //ieskant mygtuko naudojam ne document o this.element, kas yra nuoroda i html taga i tam tikra zveri
-            this.constructor.deleteAnimal(this.id) //savybe id is metodo createAnimalId. this.constructor atitinka klase Animal
+        this.element.querySelector('.deleteBtn').addEventListener('click', () =>  //ieskant mygtuko naudojam ne document o this.element, kas yra nuoroda i html taga i tam tikra zveri
+            this.constructor.showDeleteConfirmModal(this.id) //savybe id is metodo createAnimalId. this.constructor atitinka klase Animal
             //  console.log(this.id)
+
+        );
+    }
+
+
+
+    editButton() {
+        this.element.querySelector('.editBtn').addEventListener('click', () =>
+            this.constructor.showEditModal(this) //this issiuncia visus ne statinius elementus
         );
 
     }
@@ -183,3 +380,15 @@ Animal.start();
 // sukurti statinį metodą load, kuris iš localstorage nuskaito duomenis ir juos suparsina
 
 // iš gauto išparsinto masyvo prigaminti naujų Animal objektų naudojant metodą createAnimal
+
+
+
+//2021-08-18
+
+// 1. sukurti editButton metodą ir į jį įdėti evetą click, kurį paspaududus 
+// yra iškviečiams statinis metodas showEditModal
+
+// 2. edit buttono metodo paleidimą idedame į render metodą
+
+// 3. Atvaizduojame Edit modalą su užpildytais laukeliais
+

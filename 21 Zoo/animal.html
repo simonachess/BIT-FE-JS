@@ -6,47 +6,309 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>21</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="animal.js" defer></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            background-image: linear-gradient(to top, #67c4e9 30%, #044f72 100%);
+
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: lightgrey;
+            border-radius: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 5px;
+            font-size: 28px;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        input {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 15px;
+            outline: none;
+        }
+
+        .delete-edit {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            margin: 10px;
+            width: 150px;
+        }
+
+        .radio-container {
+            margin: 10px
+        }
+
+        .radio-container input {
+            margin: 10px
+        }
+
+        #create,
+        .editBtn,
+        .deleteBtn {
+            padding: 40px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            letter-spacing: 2px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            cursor: pointer;
+        }
+
+        .editBtn,
+        .deleteBtn {
+            padding: 10px;
+            margin: 5px;
+            width: 100px;
+            letter-spacing: normal;
+
+        }
+
+        .editBtn {
+            color: rgb(83, 212, 139);
+        }
+
+        .editBtn:hover {
+            background-color: rgb(83, 212, 139);
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .deleteBtn {
+            color: rgb(228, 30, 89);
+        }
+
+        .deleteBtn:hover {
+            background-color: rgb(228, 30, 89);
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+
+        #create:hover {
+            background-color: #2da5dd;
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #create-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            background-color: lightgrey;
+            border: 1px solid grey;
+            border: none;
+            border-radius: 15px;
+            box-shadow: #fff 0px 5px 15px;
+            width: 560px;
+            padding: 10px;
+            margin: 20px;
+        }
+
+        .container-create {
+            width: 300px;
+            border: 1px solid lightgrey;
+            border-radius: 15px;
+            box-shadow: #fff 0px 5px 15px;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: rgb(240, 239, 239);
+        }
+
+        .sort-container,
+        .filter-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgb(240, 239, 239);
+            border-radius: 15px;
+            padding: 10px 40px;
+            margin: 20px;
+            box-shadow: #fff 0px 5px 15px;
+
+        }
+
+
+
+        .title {
+            background-color: rgb(240, 239, 239);
+            border-radius: 15px;
+            padding: 10px 40px;
+            margin: 20px;
+            font-size: 40px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            box-shadow: #fff 0px 5px 15px;
+        }
+
+        #animals-list {
+            margin: 10px;
+            width: 150px;
+        }
+
+        .modal-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-around;
+            background-color: rgb(240, 239, 239);
+            padding: 26px;
+            border-radius: 15px;
+
+        }
+
+        .confirmDel {
+            font-size: 20px;
+            color: red;
+        }
+
+        .select-container option{
+            width: 100px;
+        }
+    </style>
+
 </head>
 
 <body>
-    <div style="display: flex; 
-    flex-direction: row; 
-    align-items: center;
-    justify-content: space-around;
-    background-color: lightgrey;
-    border: 1px solid grey;
-    border:none; 
-    border-radius: 15px;  
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    width: 500px; 
-    padding: 10px;
-    margin: 20px 10px;">
-        <div>
-            <div>Specie: <br><input id="specie" type="text" value="specie" style="font-size: 16px; margin-top:5px;"></div>
-            <br>
-            <div>Tail long: <br><input id="tailLong" type="text" value="tailLong" style="font-size: 16px; margin-top:5px;"></div>
-            <br>
-            <div> Color: <br><input id="color" type="text" value="color" style="font-size: 16px; margin-top:5px;"></div>
-            <br>
-            <div><input id="horn" type="checkbox" name="horn">
-                <label for="horn"> Has horn</label>
-            </div><br>
-        </div>
+    <div style="display: flex; flex-direction: row;">
+        <div id="create-container">
+            <div>
+                <div>Specie: <br><input name="specie" type="text" value="specie"
+                        style="font-size: 16px; margin-top:5px;">
+                </div>
+                <br>
+                <div>Tail long: <br><input name="tailLong" type="text" value="tail long"
+                        style="font-size: 16px; margin-top:5px;"></div>
+                <br>
+                <div> Color: <br><input name="color" type="text" value="color" style="font-size: 16px; margin-top:5px;">
+                </div>
+                <br>
+                <div><input type="checkbox" name="horn">
+                    <label for="horn"> Has horn</label>
+                </div><br>
+            </div>
 
-        <div style="margin: 30px 40px">
-            <button id="create" style="padding: 40px; 
-        border:none; 
-        border-radius: 15px; 
-        font-size: 16px; 
-        letter-spacing: 2px; 
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-        cursor: pointer;">
-                Create</button>
+            <div style="margin: 30px 40px">
+                <button id="create">
+                    Create</button>
+            </div>
+        </div>
+        <div>
+            <div class="sort-container">
+                <h5>Sort by: </h5>
+                <div class="button-container">
+
+                    <button id="sort_specie">Name</button>
+                    <button id="sort_tail_long">Tail long</button>
+                </div>
+                <div class="radio-container">
+                    <input type="radio" name="sort_dir" id="sort_acs" checked><label for="sort-acs">ascending</label>
+                    <input type="radio" name="sort_dir" id="sort_decs"><label for="sort-decs">descending</label>
+                </div>
+            </div>
+            <div class="filter-container">
+                <h5>Filter by: </h5>
+                <div class="button-container">
+
+                    <button id="filter">Filter Animal</button>
+                    <button id="all">Show All</button>
+                </div>
+                <div class="select-container">
+                    <select name="" id="animals_list">
+
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="container" style="display: flex; flex-direction: row; flex-wrap: wrap">
+    <div class="title">
+        <p>Who lives in the Zoo?</p>
+    </div>
+    <div class="container" style="display: flex; justify-content: center; flex-direction: row; flex-wrap: wrap">
 
+    </div>
+
+
+
+    <!-- Modal -->
+    <div id="edit-container" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Animal</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-container">
+                        <div>
+                            <div>Specie: <br><input name="specie" type="text" value="specie"
+                                    style="font-size: 16px; margin-top:5px;"></div>
+                            <br>
+                            <div>Tail long: <br><input name="tailLong" type="text" value="tailLong"
+                                    style="font-size: 16px; margin-top:5px;">
+                            </div>
+                            <br>
+                            <div> Color: <br><input name="color" type="text" value="color"
+                                    style="font-size: 16px; margin-top:5px;"></div>
+                            <br>
+                            <div><input type="checkbox" name="horn">
+                                <label for="horn"> Has horn</label>
+                            </div><br>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- confirm delete modal -->
+    <div id="confirm-delete" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-container">
+                        <div class="confirmDel">
+                            Do you really want to delete animal?
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="blabla">Confirm</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 </body>
