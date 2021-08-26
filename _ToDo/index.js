@@ -29,6 +29,7 @@ class createtedTask {
         this.clearTasks()
         this.tasks.push(new createtedTask(title, description, state));
         this.renderTasks();
+        this.count();
         this.save();
 
     }
@@ -57,7 +58,7 @@ class createtedTask {
         const btnSave = document.querySelector("#saveBtn");
         const textArea = document.querySelector("#descriptionTask")
         //todo get focus on load modal box
-
+       
         btnSave.addEventListener('click', () => {
 
             this.createTask(titleTask.value, descriptionTask.value);
@@ -84,6 +85,7 @@ class createtedTask {
                 this.renderTasks();
             };
         });
+        this.count()
         this.save();
     }
 
@@ -108,6 +110,7 @@ class createtedTask {
         JSON.parse(localStorage.getItem('tasksApp')).forEach(e => {
             this.createTask(e.title, e.description, e.state);
         });
+        this.count();
     }
 
     static moveTask(id) {
@@ -116,7 +119,6 @@ class createtedTask {
                 const taskElement = document.getElementById(id);
                 if (task.state === State.created) {
                     task.state = State.doing;
-                    console.log(task.state);
                     document.querySelector(".doing").appendChild(taskElement);
                     this.save();
                 }
@@ -127,8 +129,37 @@ class createtedTask {
                 }
             };
         })
+        this.count();
     }
 
+    static count() {
+        const countAll = this.tasks.length;
+        document.querySelector("#count_all").innerHTML = countAll;
+        
+        let countCreated = 0;
+        let countDoing = 0;
+        let countDone = 0;
+
+        this.tasks.forEach(task => {
+            if (task.state === State.created) {
+                countCreated++;
+            }
+            if (task.state === State.doing) {
+                countDoing++;
+            }
+            if (task.state === State.done) {
+                countDone++;
+            }
+        })
+        // console.log('sukurta:', countCreated);
+        // console.log('vykdoma:', countDoing);
+        // console.log('atlikta:', countDone)
+        // console.log('============')
+
+        document.querySelector("#count_created").innerHTML = countCreated;
+        document.querySelector("#count_done").innerHTML = countDone;
+        document.querySelector("#count_doing").innerHTML = countDoing;
+    }
 
 
     constructor(title, description, state = State.created) {
@@ -145,11 +176,10 @@ class createtedTask {
         this.addDblClikListener();
 
     }
-    //to do patikrinti kur ipaiso divus
+
     createTaskElement() {
         this.element = document.createElement("div");
         this.element.setAttribute('id', this.id);
-        // document.querySelector(".created").appendChild(this.element);
 
         if (this.state === State.created) {
             document.querySelector(".created").appendChild(this.element);

@@ -80,7 +80,7 @@ textarea {
 .count-tasks {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .create-new {
@@ -182,7 +182,3 @@ textarea {
     cursor: pointer;
 }
 
-/* .fall{
-    transform: translateY(8rem) rotateZ(20deg);
-    opacity: 0;
-} */
