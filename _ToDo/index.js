@@ -40,21 +40,14 @@ class createtedTask {
     }
 
     static clearTasks() {
-        this.tasks.forEach(e => document.querySelector('.created').removeChild(e.element));
-        // this.tasks.forEach(task => {
-            
-        //         if (task.state === State.created) {
-        //             document.querySelector('.created').removeChild(this.element);
-        //             this.save();
-        //         } else if (task.state === State.doing) {
-        //             document.querySelector('.doing').removeChild(this.element);
-        //             this.save();
-        //         } else if (task.state === State.done) {
-        //             document.querySelector('.done').removeChild(this.element);
-        //             this.save();
-        //         }
-            
-        // })
+
+        this.tasks.forEach(e => {
+            let parent = e.element.parentNode;
+            if (parent) {
+                parent.removeChild(e.element);
+            }
+
+        });
     }
 
     static btnNew() {
@@ -156,14 +149,15 @@ class createtedTask {
     createTaskElement() {
         this.element = document.createElement("div");
         this.element.setAttribute('id', this.id);
-        document.querySelector(".created").appendChild(this.element);
-        // if (this.element.state === State.created) {
-        //     document.querySelector(".created").appendChild(this.element);
-        // } else if (this.element.state === State.doing) {
-        //     document.querySelector(".doing").appendChild(this.element);
-        // } else if (this.element.state === State.done) {
-        //     document.querySelector(".done").appendChild(this.element);
-        // }
+        // document.querySelector(".created").appendChild(this.element);
+
+        if (this.state === State.created) {
+            document.querySelector(".created").appendChild(this.element);
+        } else if (this.state === State.doing) {
+            document.querySelector(".doing").appendChild(this.element);
+        } else if (this.state === State.done) {
+            document.querySelector(".done").appendChild(this.element);
+        }
 
 
     }
