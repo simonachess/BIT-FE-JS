@@ -1,10 +1,12 @@
-const toggleModal = () => {
-    document.querySelector('.modal')
+const toggleModal = (id) => {
+    document.getElementById(id)
         .classList.toggle('modal-hidden');
 };
 
-document.querySelector('.create-new').addEventListener('click', toggleModal);
-document.querySelector('#close-btn').addEventListener('click', toggleModal);
+document.querySelector('#create-new').addEventListener('click', () => toggleModal('modal-create'));
+document.querySelector('#close-btn').addEventListener('click', () => toggleModal('modal-create'));
+document.querySelector('#close-confirm-btn').addEventListener('click', () => toggleModal('modal-confirm'));
+
 
 class State {
     static created = 0;
@@ -18,7 +20,7 @@ class createtedTask {
 
     static start() {
         this.btnNew();
-
+        this.buttonConfirmDelete();
         //laikinai
         // createtedTask.createTask('pirma', 'išsivalyti dantis');
         this.load();
@@ -58,14 +60,16 @@ class createtedTask {
         const btnSave = document.querySelector("#saveBtn");
         const textArea = document.querySelector("#descriptionTask")
         //todo get focus on load modal box
-       
+
         btnSave.addEventListener('click', () => {
-
-            this.createTask(titleTask.value, descriptionTask.value);
-            titleTask.value = '';
-            descriptionTask.value = '';
-            toggleModal();
-
+            if (titleTask.value) {
+                this.createTask(titleTask.value, descriptionTask.value);
+                titleTask.value = '';
+                descriptionTask.value = '';
+                toggleModal('modal-create');
+            } else {
+                alert('Enter tasks title');
+            }
         });
 
         textArea.addEventListener("keyup", function (event) {
@@ -74,18 +78,19 @@ class createtedTask {
                 btnSave.click();
             }
         })
+
     }
 
     static deleteTask(id) {
 
         this.tasks.forEach((e, i) => {
-            if (id === e.id) {
+            if (id === `${e.id}`) {
                 this.clearTasks();
                 this.tasks.splice(i, 1);
                 this.renderTasks();
             };
         });
-        this.count()
+        this.count();
         this.save();
     }
 
@@ -113,6 +118,29 @@ class createtedTask {
         this.count();
     }
 
+    static showDeleteConfirmModal(id) {
+        const modal = document.querySelector("#modal-confirm");
+        modal.querySelector('#yesBtn').dataset.id = id;
+        toggleModal('modal-confirm');
+    }
+
+    //pridejau 08-27
+
+    static buttonConfirmDelete() {
+        document.querySelector('#yesBtn').
+            addEventListener('click', (e) => {
+                console.log('pasp')
+                this.deleteTask(e.target.dataset.id);
+                this.hideModal("modal-confirm");
+            });
+
+    }
+
+    static hideModal(id) {
+        toggleModal(id);
+        // delete modal.querySelector('#yesBtn').dataset.id; 
+    }
+
     static moveTask(id) {
         this.tasks.forEach(task => {
             if (id === task.id) {
@@ -135,7 +163,7 @@ class createtedTask {
     static count() {
         const countAll = this.tasks.length;
         document.querySelector("#count_all").innerHTML = countAll;
-        
+
         let countCreated = 0;
         let countDoing = 0;
         let countDone = 0;
@@ -151,10 +179,6 @@ class createtedTask {
                 countDone++;
             }
         })
-        // console.log('sukurta:', countCreated);
-        // console.log('vykdoma:', countDoing);
-        // console.log('atlikta:', countDone)
-        // console.log('============')
 
         document.querySelector("#count_created").innerHTML = countCreated;
         document.querySelector("#count_done").innerHTML = countDone;
@@ -183,33 +207,26 @@ class createtedTask {
 
         if (this.state === State.created) {
             document.querySelector(".created").appendChild(this.element);
+
         } else if (this.state === State.doing) {
             document.querySelector(".doing").appendChild(this.element);
+
         } else if (this.state === State.done) {
             document.querySelector(".done").appendChild(this.element);
+
         }
 
 
     }
     createTaskHtml() {
         const html = `
-        <div style="
-        position:relative;
-        display: flex; 
-        flex-direction: row; 
-        justify-content: space-between; 
-        align-items: center; 
-        background-color: #fbced4; 
-        border: 1px solid grey; 
-        border-radius: 10px; 
-        padding: 5px 10px 5px 10px; 
-        margin-bottom: 10px" class="createdTask">
-        <div style="margin-right: 20px">
-        <p style="font-weight: bold; padding-bottom:5px">${this.title}</p>
-        <p style="font-size: 14px">${this.description}</p>
+        <div id="task_element" class="createdTask">
+        <div class="title-desc-conteiner">
+        <p class="task-title">${this.title}</p>
+        <p class="task-desc">${this.description}</p>
         </div>
-        <div style="position:absolute; right:0; cursor: pointer;">
-        <img src="trash-icon.png" alt="delete" id="btnDelete-${this.id}" style="padding: 10px;">
+        <div class="trash-container">
+        <img src="trash-icon.png" alt="delete" id="btnDelete-${this.id}">
         </div>
         </div>
         `;
@@ -220,7 +237,10 @@ class createtedTask {
     }
     addDeleteButtonListener() {
         this.element.querySelector(`#btnDelete-${this.id}`).addEventListener('click', () =>
-            this.constructor.deleteTask(this.id))
+            this.constructor.showDeleteConfirmModal(this.id))
+        // this.constructor.deleteTask(this.id))
+        //pridejau 08-27
+
     }
     addDblClikListener() {
         this.element.addEventListener('dblclick', () => {
@@ -228,8 +248,6 @@ class createtedTask {
         })
 
     }
-
-
 }
 
 

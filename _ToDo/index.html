@@ -17,24 +17,28 @@
     <div class="container">
         <h1>ToDo</h1>
         <div class="top">
-            <div class="top-left"><button class="create-new">+</button></div>
+            <div class="top-left"><button class="create-new" id="create-new">+</button></div>
             <div class="top-right">
                 <div class="count-tasks">
-                <div class="all-count">Viso: <span id="count_all"> </span></div>
-                <div class="created-count">Sukurta: <span id="count_created"> </span></div>
-                <div class="doing-count">Vykdoma: <span id="count_doing"> </span></div>
-                <div class="done-count">Atlika: <span id="count_done"> </span></div>
-            </div></div>
+                    <div class="all-count">Viso: <span id="count_all" class="count"> </span></div>
+                    <div class="created-count">Sukurta: <span id="count_created" class="count"> </span></div>
+                    <div class="doing-count">Vykdoma: <span id="count_doing" class="count"> </span></div>
+                    <div class="done-count">Atlika: <span id="count_done" class="count"> </span></div>
+                </div>
+            </div>
         </div>
-     
-<div class="modal modal-hidden">
-    <div class="modal-content">
-        <div class="modal-close-btn"><span id="close-btn">x</span></div>
-        <div class="modal-top">Pavadinimas: <input autofocus type="text" id="titleTask" autofocus></div>
-        <div class="modal-bottom"><p>Aprašymas: </p><textarea id="descriptionTask" name="desc" id="desc" cols="40" rows="4"></textarea></div>
-        <button id="saveBtn">Save</button>
-    </div>
-</div>
+
+        <div class="modal modal-hidden" id="modal-create">
+            <div class="modal-content">
+                <div class="modal-close-btn"><span id="close-btn">x</span></div>
+                <div class="modal-top">Pavadinimas: <input autofocus type="text" id="titleTask" autofocus></div>
+                <div class="modal-bottom">
+                    <p>Aprašymas: </p><textarea id="descriptionTask" name="desc" id="desc" cols="40"
+                        rows="4"></textarea>
+                </div>
+                <button id="saveBtn">Save</button>
+            </div>
+        </div>
 
         <div class="all-lists">
             <div class="cards list-created">
@@ -54,6 +58,16 @@
 
         </div>
     </div>
+<!-- confirm delete modal -->
+<div class="modal modal-hidden" id="modal-confirm">
+    <div class="modal-confirm-content">
+        <div class="modal-confirm-close-btn"><span id="close-confirm-btn">x</span></div>
+        <div class="modal-confirm-top"><h3>Ar tikrai norite ištrinti?</h3> </div>
+        <button id="yesBtn">Ištrinti</button>
+    </div>
+</div>
+
+
 
 </body>
 
