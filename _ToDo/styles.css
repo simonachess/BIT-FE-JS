@@ -38,10 +38,6 @@ textarea {
     outline: none;
 }
 
-.container{
-    margin: 0;
-}
-
 #saveBtn, #yesBtn {
     width: 100%;
     padding: 10px;
@@ -62,6 +58,11 @@ textarea {
     background: -webkit-linear-gradient(to center, #7a2828, #a73737);
     background: linear-gradient(to center, #7a2828, #a73737);
     transition: all ease-in 0.2s;
+}
+
+.container {
+    height: 100vh;
+    margin: 10px;
 }
 
 .top {
@@ -105,18 +106,18 @@ textarea {
     outline: none;
 }
 
-.all-lists {
+.all-list {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin: 30px 20px;
 }
 
 .cards {
+    height: 600px;
     width: 30%;
-    height: 70vh;
     border: none;
     border-radius: 20px;
-    margin: 20px;
     padding: 10px;
     letter-spacing: 2px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -209,6 +210,10 @@ textarea {
     background-color: #aaebd3;
 }
 
+.done-btn {
+    display: none;
+}
+
 .title-desc-container {
     margin-right: 20px;
 }
@@ -222,12 +227,9 @@ textarea {
     font-size: 14px;
 }
 
-#btnDelete {
-    padding: 10px;
-}
-
-.trash-conainer {
+.trash, .done-btn {
     cursor: pointer;
+    padding: 5px;
 }
 
 .count {
@@ -240,14 +242,16 @@ textarea {
     margin: 0 15px 0 2px;
 }
 
+.swiper-slide {
+    padding: 20px;
+}
+
 @media only screen and (max-width: 600px) {
     body {
         margin: 0;
     }
-    .all-lists {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .all-list {
+        margin: 0;
     }
     .cards {
         width: 480px;
@@ -265,20 +269,21 @@ textarea {
         align-items: center; */
         margin: 0 10px;
     }
+    .swiper-slide {
+        margin: 10px;
+    }
 }
 
 @media only screen and (max-width: 360px) {
     body {
         margin: 0;
     }
-    .all-lists {
-        display: flex;
-        flex-direction: column;
-        align-items: unset;
+    .all-list {
+        margin: 0;
     }
     .top {
         display: inline-flex;
-        margin: 0 10px;
+        margin: 10px;
     }
     .top-left, .top-right {
         font-size: 12px;
@@ -289,6 +294,10 @@ textarea {
         font-size: 20px;
         padding-bottom: 0;
         width: 360px;
+    }
+
+    .created .done-btn, .doing .done-btn {
+        display: inline;
     }
     .count-tasks span {
         padding: 1px 5px;
@@ -302,5 +311,8 @@ textarea {
         flex-direction: column;
         align-items: center;
         margin: 0 10px;
+    }
+    .swiper-slide {
+        margin: 10px;
     }
 }

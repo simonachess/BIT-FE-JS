@@ -143,7 +143,7 @@ class createtedTask {
 
     static moveTask(id) {
         this.tasks.forEach(task => {
-            if (id === task.id) {
+            if (id == task.id) {
                 const taskElement = document.getElementById(id);
                 if (task.state === State.created) {
                     task.state = State.doing;
@@ -197,6 +197,7 @@ class createtedTask {
         this.createTaskElement();
         this.createTaskHtml();
         this.addDeleteButtonListener();
+        this.addDoneButtonListener();
         this.addDblClikListener();
 
     }
@@ -225,8 +226,9 @@ class createtedTask {
         <p class="task-title">${this.title}</p>
         <p class="task-desc">${this.description}</p>
         </div>
-        <div class="trash-container">
-        <img src="trash-icon.png" alt="delete" id="btnDelete-${this.id}">
+        <div class="btn-container">
+        <img src="done-icon.png" alt="done" class="done-btn" id="btnDone-${this.id}">
+        <img src="trash-icon.png" class="trash" alt="delete" id="btnDelete-${this.id}">
         </div>
         </div>
         `;
@@ -240,15 +242,67 @@ class createtedTask {
             this.constructor.showDeleteConfirmModal(this.id))
         // this.constructor.deleteTask(this.id))
         //pridejau 08-27
-
     }
+    addDoneButtonListener() {
+        this.element.addEventListener('click', () =>
+            this.constructor.moveTask(this.id))
+    }
+
     addDblClikListener() {
         this.element.addEventListener('dblclick', () => {
             this.constructor.moveTask(this.id)
         })
-
     }
+
+    static swiper = new Swiper('.swiper', {
+
+        slidesPerView: 1,
+        spaceBetween: 10,
+        // Responsive breakpoints
+        breakpoints: {
+            // when window width is >= 320px
+            320: {
+                slidesPerView: 1,
+                spaceBetween: 20
+            },
+            // when window width is >= 480px
+            480: {
+                slidesPerView: 1,
+                spaceBetween: 30
+            },
+            // when window width is >= 640px
+            640: {
+                slidesPerView: 3,
+                spaceBetween: 40
+            }
+        },
+
+        // Optional parameters
+        direction: 'horizontal',
+        // loop: true,
+        // If we need pagination
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+        // And if we need scrollbar
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    });
+
+
 }
 
 
 createtedTask.start();
+
+
+
+
