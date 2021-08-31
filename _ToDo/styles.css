@@ -242,9 +242,10 @@ textarea {
     margin: 0 15px 0 2px;
 }
 
-.swiper-slide {
+/* .swiper-slide {
     padding: 20px;
-}
+} */
+
 
 @media only screen and (max-width: 600px) {
     body {
@@ -295,7 +296,6 @@ textarea {
         padding-bottom: 0;
         width: 360px;
     }
-
     .created .done-btn, .doing .done-btn {
         display: inline;
     }
@@ -305,7 +305,8 @@ textarea {
     }
     .cards {
         width: 320px;
-    }
+        
+    } 
     .all-count, .created-count, .doing-count, .done-count {
         display: flex;
         flex-direction: column;
