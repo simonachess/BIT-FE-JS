@@ -29,7 +29,7 @@ console.log('I\\\'m the Walrus!');
 console.log(`I'm the "Walrus"!`);
 
 
-let zuikis = 'Zuikis puikis Ilgaausis eina namo miegot';
+let  = 'Zuikis puikis Ilgaausis eina namo miegot';
 let grazus = 'Labas vakaras';
 console.log(grazus.length);
 console.log(grazus[9] + grazus[100]);

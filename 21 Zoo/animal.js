@@ -1,24 +1,8 @@
 
-// 5. Sukurkite createAnimalElement metodą, kuris sukuria naują DIV elementą ir jį įdeda į DOM'ą (htmlą)
-// 6. Nuorodą į tą elementą užsaugokite naujai sukurtoje savybėje element
-// 7. createAnimalElement įdėkite į konstruktorių ir paleiskite jame
-// 8. sukurti metodą animalHtml, kuriame sudėliojame animalo apraš htmlą
-// 9. aprašą įdėti su innerHTML į sukurtą savybę element su div tagu
-// 10. paleisti padarytą metodą konstruktoriuje
-// 11. htmle nusipaišyt formą su 3 inputais ir vienu mygtuku.Type text, o prasmė 4 animalo savybės
-// 12. Ketvirtas input checkbox pasirinkimas dėl uodegos
-// 13. Paspaudus mygtuką, turi susikurti naujas gyvūnas ir įsirašyti į masyvą, prie kitų
-// 14. sukurti metodą kuris generuotų atsitiktinius skaičius nuo 1000000 iki 9999999 ir priskirti tą 
-// skaičių savybei id, ir pasileistų konstruktoriuje
-// 15. Aštuntą punktą papildyti mygtuku 'istrinti'
-// 16. Mygtukui pridėti atributą data - id="" animal id savybei
-//CRUD - create, read, update, delete
-
-
-//klases sablonas
 class Animal {
 
     static animals = []; //saugomi visi gyvunai ir zverys
+    static showAnimals = []; //visi rodomi gyvuliai
     static filterSet;
     element; //nuoroda i html taga su animal
 
@@ -27,7 +11,8 @@ class Animal {
         this.buttonHideModal();
         this.buttonEdit(); //cia yra mygtukai kurie yra po viena
         this.buttonConfirmDelete();
-
+        this.filterButton();
+        this.showAllButton();
         //laikini gyvunai
         // Animal.createAnimal('zebras', 36, 'black-white', false);
         // Animal.createAnimal('elk', 14, 'brown', true);
@@ -40,11 +25,13 @@ class Animal {
 
     static createAnimal(specie, tail, color, hasHorn) {
         this.clearZoo(); //is htmlo istrinam visus gyvunus
-        this.animals.push(new Animal(specie, tail, color, hasHorn));
-        this.renderZoo(); //is naujo sudedame visus gyvunus
+        this.animals.unshift(new Animal(specie, tail, color, hasHorn));
+        this.showAnimals = this.animals.slice();
         this.save();
+        this.renderZoo(); //is naujo sudedame visus gyvunus
+
     }
-    
+
     static editAnimal(id, specie, tail, color, hasHorn) {
 
         this.animals.forEach(animal => {
@@ -56,23 +43,26 @@ class Animal {
                 animal.tail = tail;
                 animal.color = color;
                 animal.hasHorn = hasHorn;
-                this.renderZoo();
+
             };
         });
         this.save();
+        this.renderZoo();
         this.hideModal('edit-container');
     }
 
     static renderZoo() {
-        this.animals.forEach(e => {
+        this.showAnimals.forEach(e => {
             e.render();
         });
         this.filterSelect();
 
     }
 
+    //todo pataisyti clear
     static clearZoo() {
-        this.animals.forEach(e => document.querySelector('.container').removeChild(e.element));
+        // this.animals.forEach(e => document.querySelector('.container').removeChild(e.element));
+        document.querySelector('.container').innerHTML = '';
         this.clearFilterSelect();
     }
 
@@ -108,17 +98,15 @@ class Animal {
 
 
     static deleteAnimal(id) {
-        //susirandame indeksa masyvo elemente kuri norime istrinti ir tada naudojame  istrinti ta elementa
-
-        //destytojas: masyve animals surasti objektą kurio id yra lygus id argumentui ir atspausdinti indeksą
         this.animals.forEach((e, i) => {
             if (id === `${e.id}`) {
                 this.clearZoo(); //istrinam html
                 this.animals.splice(i, 1); //trina masyve, ne html, i nurodo indeksa kuri trinti, 1, kad trinti 1 elementa
-                this.renderZoo(); //perrenderinam visa html per nauja
+                this.showAnimals = this.animals.slice();
             };
         });
         this.save();
+        this.renderZoo(); //perrenderinam visa html per nauja
     }
 
     static save() {
@@ -127,7 +115,7 @@ class Animal {
 
         const data = [];
         this.animals.forEach(e => {
-            data.push(
+            data.unshift(
                 {
                     specie: e.specie,
                     tail: e.tail,
@@ -138,7 +126,6 @@ class Animal {
         // console.log(data);
 
         localStorage.setItem('zooApp', JSON.stringify(data)); //zooApp yra raktas localStoragui
-        this.makeFilterSet();
     }
 
     static load() {
@@ -148,8 +135,6 @@ class Animal {
         JSON.parse(localStorage.getItem('zooApp')).forEach(e => {
             this.createAnimal(e.specie, e.tail, e.color, e.horn);
         });
-
-        this.makeFilterSet();
 
     }
 
@@ -213,11 +198,23 @@ class Animal {
         document.querySelector('#sort_tail_long').addEventListener('click', e => {
             this.showSorted(e.target.id);
         })
-        // document.querySelector('#sort_specie, #sort_tail_long')
-        // .forEach(b => {
-        //     b.addEventListener('click', e=> this.showSorted(e.target.id));
-        // });
     }
+
+    static filterButton() {
+        document.querySelector('#filter').
+            addEventListener('click', (e) => {
+                this.showFiltered()
+            });
+    }
+
+    static showAllButton() {
+        document.querySelector('#all').
+            addEventListener('click', (e) => {
+                this.animals = [];
+                this.load();
+            });
+    }
+
     static showSorted(id) {
         if ('sort_tail_long' == id) {
             if (document.querySelector('#sort_acs').checked) {
@@ -278,11 +275,27 @@ class Animal {
             element.value = a;
             select.appendChild(element);
         });
-
     }
 
     static clearFilterSelect() {
         document.querySelector('#animals_list').innerHTML = '';
+    }
+    //todo neveikia
+    static showFiltered() {
+        const filterValue = document.querySelector("#animals_list").value;
+        const an = [];
+        this.showAnimals.forEach((animal, i) => {
+            if (animal.specie == filterValue) {
+                an.push(animal);
+            }
+        });
+
+        this.showAnimals = an;
+        this.clearZoo();
+        this.renderZoo();
+
+        document.querySelector(".editBtn").setAttribute('disabled', true);
+        document.querySelector(".deleteBtn").setAttribute('disabled', true);
     }
 
     constructor(specie, tail, color, hasHorn) {
@@ -319,7 +332,6 @@ class Animal {
         </div>
         <br>
         `;
-        //data-id="${this.id} reikalingas kad saugotu id tage
         this.element.innerHTML = html;
 
     }
@@ -328,14 +340,6 @@ class Animal {
         //todo check uniqueness
         this.id = Math.floor(Math.random() * 9000000) + 100000;
     }
-
-    // deleteButton() {
-    //     this.element.querySelector('.deleteBtn').addEventListener('click', () =>  //ieskant mygtuko naudojam ne document o this.element, kas yra nuoroda i html taga i tam tikra zveri
-    //         this.constructor.deleteAnimal(this.id) //savybe id is metodo createAnimalId. this.constructor atitinka klase Animal
-    //         //  console.log(this.id)
-
-    //     );
-    // }
 
     deleteButton() {
         this.element.querySelector('.deleteBtn').addEventListener('click', () =>  //ieskant mygtuko naudojam ne document o this.element, kas yra nuoroda i html taga i tam tikra zveri
@@ -355,40 +359,5 @@ class Animal {
     }
 }
 
-//2021-08-16
-//1. animalArray masyvą paversti statine savybe animals
-//2. Sukurti statini metodą createAnimal su keturiais argumentais, kuris gamintų Animal objektą ir dėtų jį į statinę savybę animals
-//3. sukurti objektiną metoda render() ir į jį iš konstruktoriaus perkelti
-// this.createAnimalElement();
-// this.createAnimalHtml();
-//4. Sukurti statinį metodą renderZoo, kuris atvaizduotų visus sukurtus 
-// gyvūnus iš statinės savtbės - masyvo animals
-//5. Sukurti statinį metodą clearZoo() kuris ištrintų visus 
-// žvėris iš DOM HTML, bet ne iš masyvo animals
-
-//2021-08-17
-// 1. buttono create animal eventą perkelti į statinį metodą buttonCreate()
-// 2. sukurti statinį metodą start() kuriame paleisti buttonCreate() metodą
-
 Animal.start();
-
-// 3. sukurti metoda deleteButton kuris ant animalo delete mygtuko uždeda click eventą.
-// eventas paleidžia metodą(dar nesukurtą) deleteAnimal
-
-// gautą masyvą sustringifaiinti ir įdėti į localstorage su raktu zooApp
-
-// sukurti statinį metodą load, kuris iš localstorage nuskaito duomenis ir juos suparsina
-
-// iš gauto išparsinto masyvo prigaminti naujų Animal objektų naudojant metodą createAnimal
-
-
-
-//2021-08-18
-
-// 1. sukurti editButton metodą ir į jį įdėti evetą click, kurį paspaududus 
-// yra iškviečiams statinis metodas showEditModal
-
-// 2. edit buttono metodo paleidimą idedame į render metodą
-
-// 3. Atvaizduojame Edit modalą su užpildytais laukeliais
 

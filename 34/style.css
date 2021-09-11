@@ -1,0 +1,20 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(231, 204, 167);
+}
+
+.square {
+    height: 150px;
+    width: 150px;
+    background-color: rgb(131, 130, 130);
+    box-shadow: rgba(246, 246, 248, 0.945) 0px 7px 35px 10px;
+    cursor: grab;
+    position: absolute;
+}
